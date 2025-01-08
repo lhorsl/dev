@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if ! command -v nvim &> /dev/null; then
+    echo "Installing Neovim..."
+    brew install neovim
+    echo "Neovim has been installed successfully!"
+else
+    echo "Neovim is already installed"
+    # brew upgrade neovim
+fi
+
+nvim --version
