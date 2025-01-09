@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if ! command -v ghostty &> /dev/null; then
+	echo "Ghostty not installed. Installing..."
+
+	brew install --cask ghostty
+
+	mkdir -p ~/.config/ghostty
+	echo "theme = rose-pine-moon" > ~/.config/ghostty/config
+
+	echo "Ghostty successfully installed with rose-pine theme."
+else
+	echo "Ghostty already installed"
+fi
+
