@@ -35,7 +35,7 @@ cd $script_dir
 
 # +111 executable by anybody +100 for user
 scripts=$(find ./runs -maxdepth 1 -mindepth 1 -perm +111 -type f)
-
+# scripts=$(find ./runs -maxdepth 1 -mindepth 1 -perm +111 -type f; find ./runs/libs -maxdepth 1 -mindepth 1 -perm +111 -type f)
 
 for script in $scripts; do
 	if echo "$script" | grep -qv "$filter"; then

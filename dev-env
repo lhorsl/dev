@@ -47,4 +47,6 @@ copy_file() {
 log "--------------------dev-env--------------------"
 
 copy_dir .config ~/.config
+copy_dir .local ~/.local
 copy_file .examplefile $HOME
+execute env/zshrc
