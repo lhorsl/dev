@@ -45,14 +45,17 @@ add_line '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh' "$ZSHRC"
 
 add_line 'alias ll="ls -la"' "$ZSHRC"
 add_line 'alias python="python3"' "$ZSHRC"
+add_line 'alias vim="nvim"' "$ZSHRC"
+add_line 'alias dev-env="./dev-env \$@"' "$ZSHRC"
 
 # Add environment variables to zsh_profile
 add_line 'export PATH=$HOME/bin:/usr/local/bin:$PATH' "$ZSH_PROFILE"
+add_line 'export PATH=$PATH:$HOME/go/bin' "$ZSHRC"
+add_line 'export PATH=$PATH:$HOME/.local/scripts' "$ZSHRC"
+
 
 # Source zshrc from zsh_profile if not already done
 add_line '[[ -f ~/.zshrc ]] && source ~/.zshrc' "$ZSH_PROFILE"
 
-add_line 'export PATH=$PATH:$HOME/go/bin' "$ZSHRC"
-add_line 'export PATH=$PATH:$HOME/.local/scripts' "$ZSHRC"
 echo -e "\n${GREEN}Configuration complete!${NC}"
 echo "To apply changes, run: source ~/.zshrc"
