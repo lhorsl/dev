@@ -48,4 +48,6 @@ log "--------------------dev-env--------------------"
 
 copy_dir .config ~/.config
 copy_dir .local ~/.local
+copy_file .ready-tmux ~
+copy_file .config/tmux/.tmux.conf ~
 execute env/zshrc

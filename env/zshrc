@@ -53,7 +53,8 @@ add_line 'export PATH=$HOME/bin:/usr/local/bin:$PATH' "$ZSH_PROFILE"
 add_line 'export PATH=$PATH:$HOME/go/bin' "$ZSHRC"
 add_line 'export PATH=$PATH:$HOME/.local/scripts' "$ZSHRC"
 
-
+# Add keybinding too call tmux-sessionizer
+add_line 'bindkey -s "^F" "tmux-sessionizer\n"' "$ZSHRC"
 # Source zshrc from zsh_profile if not already done
 add_line '[[ -f ~/.zshrc ]] && source ~/.zshrc' "$ZSH_PROFILE"
 
