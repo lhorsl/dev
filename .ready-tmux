@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if ! tmux list-windows | grep -q "(nvim)"; then
+if ! tmux list-windows | grep "nvim"; then
     # Create a new window named 'nvim' (if this is the first window, rename it instead)
     if [[ $(tmux list-windows | wc -l) -eq 1 ]]; then
         tmux rename-window 'nvim'
@@ -9,7 +9,11 @@ if ! tmux list-windows | grep -q "(nvim)"; then
     fi
 fi
 
-if ! tmux list-windows | grep -q "(scratch)"; then
+if ! tmux list-windows | grep "lazy"; then
+    tmux new-window -n 'lazy'
+fi
+
+if ! tmux list-windows | grep "scratch"; then
     tmux new-window -n 'scratch'
 fi
 

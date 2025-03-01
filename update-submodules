@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "Updating submodules..."
+
+git submodule update --remote
+
+echo "Submodules updated."
