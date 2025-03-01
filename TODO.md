@@ -1,3 +1,4 @@
 - fix .ready-tmux recreating windows when rejoining a session
 - fix docker install does not seem to work
 - figure out the log scrolling and copying
+- learn about jq !! 
