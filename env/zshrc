@@ -47,6 +47,7 @@ add_line 'alias ll="ls -la"' "$ZSHRC"
 add_line 'alias python="python3"' "$ZSHRC"
 add_line 'alias vim="nvim"' "$ZSHRC"
 add_line 'alias dev-env="./dev-env \$@"' "$ZSHRC"
+add_line 'alias lg="lazygit"' "$ZSHRC"
 
 # Add environment variables to zsh_profile
 add_line 'export PATH=$HOME/bin:/usr/local/bin:$PATH' "$ZSH_PROFILE"
