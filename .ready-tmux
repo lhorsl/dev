@@ -9,6 +9,10 @@ if ! tmux list-windows | grep "nvim"; then
     fi
 fi
 
+if ! tmux list-windows | grep "claude"; then
+    tmux new-window -n 'claude'
+fi
+
 if ! tmux list-windows | grep "lazy"; then
     tmux new-window -n 'lazy'
 fi
