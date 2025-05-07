@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
-selected=$(find ~/repos -mindepth 1 -maxdepth 2 -type d | fzf)
+selected=$(find ~/repos -mindepth 1 -maxdepth 1 -type d | fzf)
 if [[ -z "$selected" ]]; then
     exit 0
 fi
 selected_name=$(basename $selected | tr ".,: " "____")
 
+new_session=false
 if ! tmux has-session -t="$selected_name" 2>/dev/null; then
     tmux new-session -ds $selected_name -c $selected
+    new_session=true
+fi
+
+if [[ "$new_session" = true ]]; then
+    # For new sessions, send the ready-tmux command directly to the session
+    tmux send-keys -t $selected_name "ready-tmux" Enter
 fi
 
 if [[ -z "$TMUX" ]]; then
-    tmux attach-session -t $selected_name \; send-keys "ready-tmux" Enter 
+    # If outside tmux, attach to the session
+    tmux attach-session -t $selected_name
 else
+    # If inside tmux, switch to the session
     tmux switch-client -t $selected_name
-    tmux send-keys -t $selected_name "ready-tmux" Enter
 fi
