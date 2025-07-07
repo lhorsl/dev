@@ -25,6 +25,7 @@ execute() {
 	"$@"
 }
 
+# Copy the subdirectories in the dir
 copy_dir() {
 	pushd $1
 	to=$2
@@ -34,6 +35,14 @@ copy_dir() {
 		execute cp -r $dir $to/$dir
 	done
 	popd
+}
+# Copy a directory and its contents
+copy_all_dir() {
+	src=$1
+	dest=$2
+	
+	execute mkdir -p $dest
+	execute cp -R $src/. $dest/
 }
 
 copy_file() {
@@ -47,6 +56,7 @@ copy_file() {
 log "--------------------dev-env--------------------"
 
 copy_dir .config ~/.config
+copy_all_dir .claude ~/.claude
 copy_dir .local ~/.local
 copy_file .ready-tmux ~
 copy_file .config/tmux/.tmux.conf ~
