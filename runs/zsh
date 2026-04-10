@@ -11,3 +11,6 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
 else
         echo "Oh My Zsh is already installed."
 fi
+
+brew install zsh-autosuggestions
+brew install zsh-syntax-highlighting

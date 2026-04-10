@@ -1,3 +1,2 @@
 #!/usr/bin/env bash
-
-brew install docker --cask
+brew install --cask docker-desktop
