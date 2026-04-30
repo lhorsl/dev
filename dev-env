@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 script_dir=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 dry="0"
+platform=""
 
 while [[ $# > 0 ]]; do
 	if [[ $1 == "--dry" ]]; then
 		dry="1"
+	elif [[ $1 == "--platform" ]]; then
+		shift
+		platform="$1"
 	fi
 	shift
 done
+
+if [[ "$platform" != "mac" && "$platform" != "linux" ]]; then
+	echo "Error: --platform is required and must be 'mac' or 'linux'" >&2
+	exit 1
+fi
+
+export PLATFORM="$platform"
 
 log() {
 	if [[ $dry == "1" ]]; then

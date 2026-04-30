@@ -1,2 +1,13 @@
 #!/usr/bin/env bash
-brew install go
+
+if ! command -v go &> /dev/null; then
+    if [[ "$PLATFORM" == "mac" ]]; then
+        brew install go
+    elif [[ "$PLATFORM" == "linux" ]]; then
+        echo "Installing Go..."
+        sudo snap install go --classic
+        echo "Go installed successfully."
+    fi
+else
+    echo "Go already installed"
+fi

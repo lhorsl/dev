@@ -1,16 +1,25 @@
 #!/usr/bin/env bash
+
 if ! command -v zsh &> /dev/null; then
-        echo "Zsh not installed. Installing..."
+    echo "Zsh not installed. Installing..."
+    if [[ "$PLATFORM" == "mac" ]]; then
         brew install zsh
-        chsh -s $(which zsh)
+    elif [[ "$PLATFORM" == "linux" ]]; then
+        sudo apt install -y zsh
+    fi
+    chsh -s $(which zsh)
 fi
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        echo "Installing Oh My Zsh..."
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    echo "Installing Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else
-        echo "Oh My Zsh is already installed."
+    echo "Oh My Zsh is already installed."
 fi
 
-brew install zsh-autosuggestions
-brew install zsh-syntax-highlighting
+if [[ "$PLATFORM" == "mac" ]]; then
+    brew install zsh-autosuggestions
+    brew install zsh-syntax-highlighting
+elif [[ "$PLATFORM" == "linux" ]]; then
+    sudo apt install -y zsh-autosuggestions zsh-syntax-highlighting
+fi

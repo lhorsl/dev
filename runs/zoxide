@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
 
-brew install zoxide
-
+if ! command -v zoxide &> /dev/null; then
+    if [[ "$PLATFORM" == "mac" ]]; then
+        brew install zoxide
+    elif [[ "$PLATFORM" == "linux" ]]; then
+        sudo apt install -y zoxide
+    fi
+else
+    echo "zoxide already installed"
+fi

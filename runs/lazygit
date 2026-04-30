@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
-brew install jesseduffield/lazygit/lazygit
-
-
+if ! command -v lazygit &> /dev/null; then
+    if [[ "$PLATFORM" == "mac" ]]; then
+        brew install jesseduffield/lazygit/lazygit
+    elif [[ "$PLATFORM" == "linux" ]]; then
+        echo "Installing lazygit..."
+        LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" \
+            | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
+        curl -sLo /tmp/lazygit.tar.gz \
+            "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+        tar -xf /tmp/lazygit.tar.gz -C /tmp lazygit
+        sudo install /tmp/lazygit /usr/local/bin
+        rm /tmp/lazygit.tar.gz /tmp/lazygit
+        echo "lazygit installed successfully."
+    fi
+else
+    echo "lazygit already installed"
+fi

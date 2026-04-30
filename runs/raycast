@@ -1,2 +1,8 @@
 #!/usr/bin/env bash
+
+if [[ "$PLATFORM" == "linux" ]]; then
+    echo "skipped: raycast (mac only)"
+    exit 0
+fi
+
 brew install --cask raycast

@@ -1,2 +1,11 @@
 #!/usr/bin/env bash
-brew install tmux
+
+if ! command -v tmux &> /dev/null; then
+    if [[ "$PLATFORM" == "mac" ]]; then
+        brew install tmux
+    elif [[ "$PLATFORM" == "linux" ]]; then
+        sudo apt install -y tmux
+    fi
+else
+    echo "tmux already installed"
+fi
