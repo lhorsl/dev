@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# agent-signal <working|notification|done>
+# Flags the calling tmux window's agent status so the status line can surface it,
+# and fires a macOS notification when the window is not currently being viewed.
+# Invoked by Claude Code hooks. Resolves its own window via $TMUX_PANE, so it must
+# run inside the agent's tmux pane.
+#
+# State semantics:
+#   working -> agent busy (UserPromptSubmit)
+#   done    -> agent finished its turn (Stop)               [orange]
+#   waiting -> agent BLOCKED on a permission prompt          [red]
+#
+# The Notification hook fires both for permission prompts AND for idle "waiting for
+# input" timeouts. Only the former is treated as waiting/red; idle notifications are
+# ignored so red strictly means "a permission request is blocking the agent".
+set -euo pipefail
+
+# Not in tmux -> nothing to flag (e.g. agent launched outside a session).
+[[ -z "${TMUX_PANE:-}" ]] && exit 0
+
+event="${1:-done}"
+
+case "$event" in
+	working) state="working" ;;
+	done)    state="done" ;;
+	notification)
+		# Permission prompts mention "permission"; idle timeouts do not. Ignore idle.
+		grep -qi 'permission' || exit 0
+		state="waiting"
+		;;
+	*) exit 0 ;;
+esac
+
+# Resolve session/window/visibility of the pane this hook is running in.
+read -r sess win active attached < <(
+	tmux display-message -p -t "$TMUX_PANE" \
+		'#{session_name} #{session_name}:#{window_index} #{window_active} #{session_attached}'
+)
+
+tmux set-option -w -t "$win" @agent_status "$state"
+tmux refresh-client -S
+
+# Active push only when the agent's window is NOT being actively viewed:
+# - cross-session (session not attached -> attached==0)
+# - cross-window (window not active -> active==0)
+# Suppress when actively watching the window (active && attached) to avoid spam.
+if [[ "$state" != "working" && ! ( "$active" == "1" && "$attached" -ge 1 ) ]]; then
+	if [[ "$state" == "waiting" ]]; then
+		msg="needs your permission"
+	else
+		msg="finished its turn"
+	fi
+	osascript -e "display notification \"$msg\" with title \"agent: $sess\"" >/dev/null 2>&1 || true
+fi

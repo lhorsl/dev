@@ -4,8 +4,9 @@ if ! tmux list-windows | grep "nvim"; then
     # Create a new window named 'nvim' (if this is the first window, rename it instead)
     if [[ $(tmux list-windows | wc -l) -eq 1 ]]; then
         tmux rename-window 'nvim'
+        tmux send-keys -t 'nvim' 'nvim' Enter
     else
-        tmux new-window -n 'nvim'
+        tmux new-window -n 'nvim' 'nvim'
     fi
 fi
 

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# agent-attention
+# Summarises agents needing attention across ALL tmux sessions for status-right.
+# Emits tmux-styled tokens: "[session]" (red) for waiting, "[session]" (yellow) for done.
+# Deduplicates per session; waiting outranks done. Empty output when nothing waits.
+set -euo pipefail
+
+tmux list-windows -a -F '#{session_name} #{@agent_status}' 2>/dev/null | awk '
+	$2 == "waiting" { w[$1] = 1 }
+	$2 == "done"    { d[$1] = 1 }
+	END {
+		out = ""
+		for (s in w) out = out " #[fg=black,bg=red,bold] [" s "] #[default]"
+		for (s in d) if (!(s in w)) out = out " #[fg=black,bg=yellow,bold] [" s "] #[default]"
+		print out
+	}
+'
