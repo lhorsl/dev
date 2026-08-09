@@ -54,7 +54,7 @@ add_line 'alias cl="claude"' "$ZSHRC"
 add_line 'export PATH=$HOME/bin:/usr/local/bin:$PATH' "$ZSH_PROFILE"
 add_line 'export PATH=$PATH:$HOME/go/bin' "$ZSHRC"
 add_line 'export PATH=$PATH:$HOME/.local/scripts' "$ZSHRC"
-
+add_line 'export PATH="$HOME/.local/bin:$PATH"' "$ZSHRC"
 # Add keybinding too call tmux-sessionizer
 add_line 'bindkey -s "^F" "tmux-sessionizer\n"' "$ZSHRC"
 # Docker Desktop PATH is macOS-specific

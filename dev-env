@@ -42,6 +42,12 @@ copy_dir() {
 	to=$2
 	dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
 	for dir in $dirs; do
+		# Skip empty source dirs (e.g. an uninitialized submodule) so we never
+		# wipe a live target config and replace it with nothing.
+		if [[ -z "$(find "$dir" -mindepth 1 -print -quit)" ]]; then
+			log "skip (empty source): $dir"
+			continue
+		fi
 		execute rm -rf $to/$dir
 		execute cp -r $dir $to/$dir
 	done
