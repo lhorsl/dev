@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Format: "<binary> <brew formula> <apt package>"
+TOOLS=(
+    "jq jq jq"
+    "fd fd fd-find"
+)
+
+for entry in "${TOOLS[@]}"; do
+    read -r binary formula package <<< "$entry"
+
+    if command -v "$binary" &> /dev/null; then
+        echo "$binary already installed"
+        continue
+    fi
+
+    if [[ "$PLATFORM" == "mac" ]]; then
+        brew install "$formula"
+    elif [[ "$PLATFORM" == "linux" ]]; then
+        sudo apt install -y "$package"
+        # Debian ships fd-find as "fdfind" to avoid a name clash; alias it into
+        # ~/.local/bin, which env/zshrc already puts on PATH.
+        if [[ "$binary" == "fd" ]] && command -v fdfind &> /dev/null; then
+            mkdir -p ~/.local/bin
+            ln -sf "$(command -v fdfind)" ~/.local/bin/fd
+        fi
+    fi
+done

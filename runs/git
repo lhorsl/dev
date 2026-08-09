@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# gh covers auth + PR flow. Identity is NOT hardcoded: set GIT_USER_NAME and
+# GIT_USER_EMAIL in the environment to have it configured non-interactively,
+# otherwise this prints the commands to run by hand.
+if [[ "$PLATFORM" == "mac" ]]; then
+    brew install git gh
+elif [[ "$PLATFORM" == "linux" ]]; then
+    sudo apt install -y git gh
+fi
+
+configure() {
+    local key="$1" value="$2"
+    if [[ -n "$value" ]]; then
+        git config --global "$key" "$value"
+        echo "git config --global $key -> $value"
+    elif [[ -z "$(git config --global --get "$key")" ]]; then
+        echo "WARNING: $key unset. Run: git config --global $key \"...\"" >&2
+    fi
+}
+
+configure user.name "${GIT_USER_NAME:-}"
+configure user.email "${GIT_USER_EMAIL:-}"
+git config --global init.defaultBranch main
+
+if ! ls ~/.ssh/id_*.pub &> /dev/null && ! gh auth status &> /dev/null; then
+    echo "WARNING: no SSH key and no gh auth. Private clones will fail." >&2
+    echo "  ssh-keygen -t ed25519 -C \"\$GIT_USER_EMAIL\"  # then add to GitHub" >&2
+    echo "  gh auth login" >&2
+fi

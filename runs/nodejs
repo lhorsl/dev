@@ -1,2 +1,15 @@
 #!/usr/bin/env bash
-brew install node@22
+
+if command -v node &> /dev/null; then
+    echo "Node already installed ($(node --version))"
+    exit 0
+fi
+
+if [[ "$PLATFORM" == "mac" ]]; then
+    brew install node@22
+elif [[ "$PLATFORM" == "linux" ]]; then
+    echo "Installing Node.js 22..."
+    curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    echo "Node.js installed successfully."
+fi

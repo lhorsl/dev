@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# .claude/settings.json ships UserPromptSubmit/Notification/Stop hooks that drive
+# the tmux agent-status colouring, so the CLI is a hard dependency of this setup.
+if command -v claude &> /dev/null; then
+    echo "Claude Code already installed"
+    exit 0
+fi
+
+if [[ "$PLATFORM" == "mac" ]]; then
+    brew install --cask claude-code
+elif [[ "$PLATFORM" == "linux" ]]; then
+    echo "Installing Claude Code..."
+    # Installs into ~/.local/bin, which env/zshrc already puts on PATH.
+    curl -fsSL https://claude.ai/install.sh | bash
+    echo "Claude Code installed successfully."
+fi

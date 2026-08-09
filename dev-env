@@ -72,6 +72,13 @@ copy_file() {
 
 log "--------------------dev-env--------------------"
 
+cd "$script_dir"
+
+if [[ -z "$(find .config/nvim -mindepth 1 -print -quit 2> /dev/null)" ]]; then
+	log "nvim submodule not initialised"
+	execute git submodule update --init --recursive
+fi
+
 copy_dir .config ~/.config
 copy_all_dir .claude ~/.claude
 copy_dir .local ~/.local

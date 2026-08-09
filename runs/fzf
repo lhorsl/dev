@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Required by tmux-sessionizer, which backs both the ^F zsh binding and the tmux popup
+if ! command -v fzf &> /dev/null; then
+    if [[ "$PLATFORM" == "mac" ]]; then
+        brew install fzf
+    elif [[ "$PLATFORM" == "linux" ]]; then
+        sudo apt install -y fzf
+    fi
+else
+    echo "fzf already installed"
+fi
