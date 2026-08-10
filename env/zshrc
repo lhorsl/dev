@@ -6,7 +6,7 @@ GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
 ZSHRC="$HOME/.zshrc"
-ZSH_PROFILE="$HOME/.zsh_profile"
+ZPROFILE="$HOME/.zprofile"
 
 # Function to check if a line exists in a file
 line_exists() {
@@ -36,33 +36,40 @@ ensure_file_exists() {
     fi
 }
 # --------------------- EXECUTE -------------------
-# Ensure both files exist
 ensure_file_exists "$ZSHRC"
-ensure_file_exists "$ZSH_PROFILE"
-
-#Add fzf config
-add_line '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh' "$ZSHRC"
+ensure_file_exists "$ZPROFILE"
 
 add_line 'alias ll="ls -la"' "$ZSHRC"
 add_line 'alias python="python3"' "$ZSHRC"
 add_line 'alias vim="nvim"' "$ZSHRC"
-add_line 'alias dev-env="./dev-env \$@"' "$ZSHRC"
 add_line 'alias lg="lazygit"' "$ZSHRC"
 add_line 'alias cl="claude"' "$ZSHRC"
 
-# Add environment variables to zsh_profile
-add_line 'export PATH=$HOME/bin:/usr/local/bin:$PATH' "$ZSH_PROFILE"
-add_line 'export PATH=$PATH:$HOME/go/bin' "$ZSHRC"
-add_line 'export PATH=$PATH:$HOME/.local/scripts' "$ZSHRC"
+add_line 'export PATH="$HOME/bin:$PATH"' "$ZSHRC"
 add_line 'export PATH="$HOME/.local/bin:$PATH"' "$ZSHRC"
-# Add keybinding too call tmux-sessionizer
+add_line 'export PATH=$PATH:$HOME/.local/scripts' "$ZSHRC"
+add_line 'export PATH=$PATH:$HOME/go/bin' "$ZSHRC"
+
+add_line 'command -v fzf > /dev/null && source <(fzf --zsh)' "$ZSHRC"
+add_line 'command -v zoxide > /dev/null && eval "$(zoxide init zsh)"' "$ZSHRC"
+
+add_line 'export TMUX_SESSIONIZER_MAXDEPTH=2' "$ZSHRC"
 add_line 'bindkey -s "^F" "tmux-sessionizer\n"' "$ZSHRC"
-# Docker Desktop PATH is macOS-specific
-if [[ "$PLATFORM" == "mac" ]]; then
-    add_line 'export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"' "$ZSHRC"
+
+if [[ "${PLATFORM:-}" == "mac" ]]; then
+    add_line '[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"' "$ZPROFILE"
+    add_line '[ -x /usr/local/bin/brew ] && eval "$(/usr/local/bin/brew shellenv)"' "$ZPROFILE"
+
+    add_line 'export PATH="${HOMEBREW_PREFIX:-/opt/homebrew}/opt/node@22/bin:$PATH"' "$ZSHRC"
+    add_line 'export PATH="$HOME/.docker/bin:$PATH"' "$ZSHRC"
 fi
-# Source zshrc from zsh_profile if not already done
-add_line '[[ -f ~/.zshrc ]] && source ~/.zshrc' "$ZSH_PROFILE"
+if [[ "${PLATFORM:-}" == "mac" ]]; then
+    add_line '[ -f "${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source "${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"' "$ZSHRC"
+    add_line '[ -f "${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"' "$ZSHRC"
+else
+    add_line '[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh' "$ZSHRC"
+    add_line '[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' "$ZSHRC"
+fi
 
 echo -e "\n${GREEN}Configuration complete!${NC}"
-echo "To apply changes, run: source ~/.zshrc"
+echo "To apply changes, run: exec zsh -l"

@@ -46,6 +46,8 @@ cd $script_dir
 
 scripts=$(find ./runs -maxdepth 1 -mindepth 1 -perm -u+x -type f | sort)
 
+failed=()
+
 for script in $scripts; do
 	if echo "$script" | grep -qv "$filter"; then
 		log "filtered: $filter : $script"
@@ -53,5 +55,16 @@ for script in $scripts; do
 
 	fi
 
-	execute ./$script
+	if ! execute ./$script; then
+		failed+=("$script")
+	fi
 done
+
+if [[ ${#failed[@]} -gt 0 ]]; then
+	echo "" >&2
+	echo "FAILED (${#failed[@]}):" >&2
+	printf '  %s\n' "${failed[@]}" >&2
+	exit 1
+fi
+
+log "all installs completed"

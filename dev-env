@@ -38,36 +38,35 @@ execute() {
 
 # Copy the subdirectories in the dir
 copy_dir() {
-	pushd $1
-	to=$2
-	dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
-	for dir in $dirs; do
+	local to="$2" dir
+	pushd "$1"
+	# -print0 into a null-delimited read, rather than word-splitting a $(find),
+	# so a directory name containing whitespace stays a single argument to rm -rf.
+	while IFS= read -r -d '' dir; do
 		# Skip empty source dirs (e.g. an uninitialized submodule) so we never
 		# wipe a live target config and replace it with nothing.
 		if [[ -z "$(find "$dir" -mindepth 1 -print -quit)" ]]; then
 			log "skip (empty source): $dir"
 			continue
 		fi
-		execute rm -rf $to/$dir
-		execute cp -r $dir $to/$dir
-	done
+		execute rm -rf "$to/$dir"
+		execute cp -r "$dir" "$to/$dir"
+	done < <(find . -maxdepth 1 -mindepth 1 -type d -print0)
 	popd
 }
 # Copy a directory and its contents
 copy_all_dir() {
-	src=$1
-	dest=$2
-	
-	execute mkdir -p $dest
-	execute cp -R $src/. $dest/
+	local src="$1" dest="$2"
+
+	execute mkdir -p "$dest"
+	execute cp -R "$src/." "$dest/"
 }
 
 copy_file() {
-	from=$1
-	to=$2
-	name=$(basename $from)
-	execute rm $to/$name
-	execute cp $from $to/$name
+	local from="$1" to="$2" name
+	name="$(basename "$from")"
+	execute rm -f "$to/$name"
+	execute cp "$from" "$to/$name"
 }
 
 log "--------------------dev-env--------------------"
@@ -78,6 +77,9 @@ if [[ -z "$(find .config/nvim -mindepth 1 -print -quit 2> /dev/null)" ]]; then
 	log "nvim submodule not initialised"
 	execute git submodule update --init --recursive
 fi
+
+# On PATH via the .zshrc managed block, and tmux-sessionizer scans ~/repos.
+execute mkdir -p ~/bin ~/.local/bin ~/.local/scripts ~/repos
 
 copy_dir .config ~/.config
 copy_all_dir .claude ~/.claude

@@ -4,7 +4,7 @@ dev enviroment using bash
 
 ## Bootstrapping a new machine
 
-Install Homebrew first (macOS) and follow its "Next steps" output, then:
+Install Homebrew first (macOS), then:
 
 ```bash
 git clone --recursive https://github.com/lhorsl/dev.git ~/repos/dev
@@ -16,6 +16,10 @@ exec zsh -l                # pick up PATH and aliases
 
 Set `GIT_USER_NAME` and `GIT_USER_EMAIL` before `./run` to configure git identity
 non-interactively, otherwise it prints the commands to run by hand.
+
+`dev-env` owns a marked block in `~/.zshrc` and `~/.zprofile` (brew shellenv,
+PATH, aliases, shell integrations). It rewrites that block in place, so re-running
+it is safe and repairs the config after Oh My Zsh replaces `~/.zshrc`.
 
 ### Manual steps
 

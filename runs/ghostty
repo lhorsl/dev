@@ -5,19 +5,8 @@ if [[ "$PLATFORM" == "linux" ]]; then
     exit 0
 fi
 
-if ! command -v ghostty &> /dev/null; then
-    echo "Ghostty not installed. Installing..."
-
+if ! command -v ghostty &> /dev/null && [[ ! -d /Applications/Ghostty.app ]]; then
     brew install --cask ghostty
-
-    mkdir -p ~/.config/ghostty
-    
-    cat > ~/.config/ghostty/config << 'EOL'
-theme = rose-pine-moon
-background-opacity = 0.96
-EOL
-
-    echo "Ghostty successfully installed with rose-pine theme."
 else
     echo "Ghostty already installed"
 fi
