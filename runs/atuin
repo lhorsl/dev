@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if ! command -v atuin &> /dev/null; then
+    if [[ "$PLATFORM" == "mac" ]]; then
+        brew install atuin
+    elif [[ "$PLATFORM" == "linux" ]]; then
+        curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh -s -- --non-interactive
+
+        mkdir -p ~/.local/bin
+        ln -sf "$HOME/.atuin/bin/atuin" ~/.local/bin/atuin
+
+        [[ -f ~/.zshrc ]] && sed -i '/^eval "\$(atuin init zsh)"$/d' ~/.zshrc
+    fi
+else
+    echo "atuin already installed"
+fi

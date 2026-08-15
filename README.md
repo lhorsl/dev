@@ -31,6 +31,8 @@ Not scriptable, do these after the install:
 - Allow Notifications for Ghostty, otherwise the agent-signal alerts are dropped
 - Set the Ghostty font to `Hack Nerd Font Mono` if the config did not take
 - `gh auth login`, or add an SSH key to GitHub
+- `atuin import auto` to pull existing shell history in, then `atuin register` (or
+  `atuin login` on a second machine) if you want history synced across machines
 
 ## Runs and installs
 

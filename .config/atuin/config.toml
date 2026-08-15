@@ -1,0 +1,12 @@
+# Full reference: https://docs.atuin.sh/configuration/config/
+
+# Enter runs the selected command, tab puts it in the prompt for editing.
+enter_accept = true
+
+[tmux]
+enabled = true
+width = "80%"
+height = "60%"
+
+[ai]
+enabled = true
