@@ -52,7 +52,7 @@ add_line 'export PATH=$PATH:$HOME/go/bin' "$ZSHRC"
 
 add_line 'command -v fzf > /dev/null && source <(fzf --zsh)' "$ZSHRC"
 add_line 'command -v zoxide > /dev/null && eval "$(zoxide init zsh)"' "$ZSHRC"
-add_line 'command -v atuin > /dev/null && eval "$(atuin init zsh)"' "$ZSHRC"
+add_line 'command -v atuin > /dev/null && eval "$(atuin init zsh --disable-up-arrow)"' "$ZSHRC"
 
 add_line 'export TMUX_SESSIONIZER_MAXDEPTH=2' "$ZSHRC"
 add_line 'bindkey -s "^F" "tmux-sessionizer\n"' "$ZSHRC"

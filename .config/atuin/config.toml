@@ -2,6 +2,8 @@
 
 # Enter runs the selected command, tab puts it in the prompt for editing.
 enter_accept = true
+dialect = "uk"
+keymap_mode = "vim-normal"
 
 [tmux]
 enabled = true
